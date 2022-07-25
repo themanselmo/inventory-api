@@ -1,4 +1,4 @@
-use crate::employees::{Employee, Employees};
+use crate::inventories::{Inventory, Inventories};
 use crate::error_handler::CustomError;
 use actix_web::{delete, get, post, put, web, HttpResponse};
 use serde_json::json;
@@ -10,28 +10,28 @@ async fn find_all() -> Result<HttpResponse, CustomError> {
 }
 
 #[get("/inventories/{id}")]
-async fn find(id: web::Path) -> Result<HttpResponse, CustomError> {
+async fn find(id: web::Path<i32>) -> Result<HttpResponse, CustomError> {
     let inventory = Inventories::find(id.into_inner())?;
     Ok(HttpResponse::Ok().json(inventory))
 }
 
 #[post("/inventories")]
-async fn create(inventory: web::Json) -> Result<HttpResponse, CustomError> {
+async fn create(inventory: web::Json<Inventory>) -> Result<HttpResponse, CustomError> {
     let inventory = Inventories::create(inventory.into_inner())?;
     Ok(HttpResponse::Ok().json(inventory))
 }
 
 #[put("/inventories/{id}")]
 async fn update(
-    id: web::Path,
-    inventory: web::Json,
+    id: web::Path<i32>,
+    inventory: web::Json<Inventory>,
 ) -> Result<HttpResponse, CustomError> {
     let inventory = Inventories::update(id.into_inner(), inventory.into_inner())?;
     Ok(HttpResponse::Ok().json(inventory))
 }
 
 #[delete("/inventories/{id}")]
-async fn delete(id: web::Path) -> Result<HttpResponse, CustomError> {
+async fn delete(id: web::Path<i32>) -> Result<HttpResponse, CustomError> {
     let deleted_inventory = Inventories::delete(id.into_inner())?;
     Ok(HttpResponse::Ok().json(json!({ "deleted": deleted_inventory })))
 }

@@ -1,6 +1,6 @@
 use crate::db;
 use crate::error_handler::CustomError;
-use crate::schema::employees;
+use crate::schema::inventories;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
