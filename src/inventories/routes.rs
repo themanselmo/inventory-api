@@ -15,6 +15,12 @@ async fn find(id: web::Path<i32>) -> Result<HttpResponse, CustomError> {
     Ok(HttpResponse::Ok().json(inventory))
 }
 
+#[get("/inventory_items/{id}")]
+async fn get_items(id: web::Path<i32>) -> Result<HttpResponse, CustomError> {
+    let inventory_items = Inventories::get_items(id.into_inner())?;
+    Ok(HttpResponse::Ok().json(inventory_items))
+}
+
 #[post("/inventories")]
 async fn create(inventory: web::Json<Inventory>) -> Result<HttpResponse, CustomError> {
     let inventory = Inventories::create(inventory.into_inner())?;
@@ -39,6 +45,7 @@ async fn delete(id: web::Path<i32>) -> Result<HttpResponse, CustomError> {
 pub fn init_routes(config: &mut web::ServiceConfig) {
     config.service(find_all);
     config.service(find);
+    config.service(get_items);
     config.service(create);
     config.service(update);
     config.service(delete);

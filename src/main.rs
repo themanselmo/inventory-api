@@ -11,6 +11,7 @@ use std::env;
 
 mod db;
 mod inventories;
+mod items;
 mod error_handler;
 mod schema;
 
@@ -20,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     db::init();
 
     let mut listenfd = ListenFd::from_env();
-    let mut server = HttpServer::new(|| App::new().wrap(Cors::permissive()).configure(inventories::init_routes));
+    let mut server = HttpServer::new(|| App::new().wrap(Cors::permissive()).configure(inventories::init_routes).configure(items::init_routes));
 
     server = match listenfd.take_tcp_listener(0)? {
         Some(listener) => server.listen(listener)?,
